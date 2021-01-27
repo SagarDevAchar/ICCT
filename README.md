@@ -3,7 +3,7 @@ Tkinter based Image Colouring / Filtering Tool (with OpenCV-Python & Numpy)
 
 #
 
-The following documentation corresponds to the **Initial Version (v1.0)** of ICCT
+The following documentation corresponds to **Version v1.1** of ICCT
 
 ## Features:
 
