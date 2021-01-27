@@ -12,7 +12,8 @@ from mpl_toolkits import mplot3d
 from matplotlib import cm
 
 appLinkURL = 'https://www.github.com/SagarDevAchar/'
-applicationOperations = {' Specific': [(0, 255, "Red"), (0, 255, "Green"), (0, 255, "Blue")],
+applicationOperations = {' Adjust': [(-100, 100, "Brightness"), (-100, 100, "Contrast"), None],
+                         ' Specific': [(0, 255, "Red"), (0, 255, "Green"), (0, 255, "Blue")],
                          ' Intensity': [(-255, 255, "Red"), (-255, 255, "Green"), (-255, 255, "Blue")],
                          ' Greyscale': [None, None, None],
                          ' Inverse': [(0, 255, "Amount"), None, None],
@@ -260,6 +261,12 @@ class ApplicationICCT:
             messagebox.showerror("Error", "Invalid Input Parameters")
             return
 
+        if operationMode == 'ADJUST':
+            B, C = R * 2.55, 1 + G / 100
+
+            ImageBGR = np.array(self.ImageBGRA[:, :, :3], dtype=np.float)
+            self.ImageBGRA = np.dstack((np.array((C * (ImageBGR - 128) + 128 + B).clip(min=0, max=255), dtype=np.uint8),
+                                        self.ImageBGRA[:, :, 3]))
         if operationMode == 'SPECIFIC':
             negative = np.where(np.logical_or(self.ImageBGRA[:, :, 0] != B,
                                               self.ImageBGRA[:, :, 1] != G,
@@ -310,7 +317,7 @@ class ApplicationICCT:
             if saveFilename != '':
                 cv2.imwrite(saveFilename, self.ImageBGRA)
 
-            messagebox.showinfo("Info", "Image saved successfully!")
+                messagebox.showinfo("Info", "Image saved successfully!")
         except Exception as e:
             print(e)
             messagebox.showerror("Error", "Error while writing file")
